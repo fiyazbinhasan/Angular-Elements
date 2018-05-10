@@ -1,16 +1,24 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injector } from '@angular/core';
 
 import { AppComponent } from './app.component';
+import { SubscriberComponent } from './subscriber/subscriber.component';
+import { createCustomElement } from '@angular/elements';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule
-  ],
+  declarations: [AppComponent, SubscriberComponent],
+  imports: [BrowserModule, ReactiveFormsModule],
   providers: [],
-  bootstrap: [AppComponent]
+  entryComponents: [SubscriberComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private injector: Injector) {
+    const subscriber = createCustomElement(SubscriberComponent, {
+      injector
+    });
+    customElements.define('app-subscriber', subscriber);
+  }
+
+  ngDoBootstrap() {}
+}
